@@ -7,7 +7,7 @@ const PRODUCT_LABELS = {
   DBL: "Drive Belt (DBL)",
 }
 
-export default function ListLabelSection({ product, variants, onSave }) {
+export default function ListLabelSection({ product, variants, onSave, threshold }) {
   if (variants.length === 0) return null
 
   return (
@@ -21,6 +21,7 @@ export default function ListLabelSection({ product, variants, onSave }) {
             key={variant.sku}
             variant={variant}
             onSave={onSave}
+            threshold={threshold}
           />
         ))}
       </div>

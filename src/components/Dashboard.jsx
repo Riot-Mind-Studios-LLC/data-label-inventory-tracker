@@ -29,7 +29,7 @@ export default function Dashboard({
 
       <section className="mb-8">
         <h3 className="mb-3 text-lg font-semibold">Drive Belt (DBL)</h3>
-        {dblEntry && <CardLabelVariant variant={dblEntry} onSave={onSaveLabel} />}
+        {dblEntry && <CardLabelVariant variant={dblEntry} onSave={onSaveLabel} threshold={settings.lowStockThreshold} />}
       </section>
 
       <section>

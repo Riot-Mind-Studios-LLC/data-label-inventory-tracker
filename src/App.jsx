@@ -159,6 +159,7 @@ function App() {
                   dplData={dplData}
                   onSaveLabel={handleSaveLabel}
                   onSaveDpl={handleSaveDpl}
+                  threshold={settings.lowStockThreshold}
                 />
               )
           )}

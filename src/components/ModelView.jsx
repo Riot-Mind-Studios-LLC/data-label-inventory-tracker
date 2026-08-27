@@ -9,11 +9,7 @@ const PRODUCT_ORDER = ["BJB", "CJB", "PCM", "DBL"];
 const BUNDLE_NUMBERS = [1, 2, 3];
 
 export default function ModelView({
-  model,
-  labelData,
-  dplData,
-  onSaveLabel,
-  onSaveDpl,
+  model, labelData, dplData, onSaveLabel, onSaveDpl, threshold,
 }) {
   const groupedByProduct = useMemo(() => {
     const groups = {};
@@ -43,6 +39,7 @@ export default function ModelView({
             product={product}
             variants={groupedByProduct[product]}
             onSave={onSaveLabel}
+            threshold={threshold}
           />
         ))}
 
