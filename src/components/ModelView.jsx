@@ -43,8 +43,11 @@ export default function ModelView({
           />
         ))}
 
-        <section className="mb-8">
-          <h3 className="mb-3 text-lg font-semibold">Door Placard (DPL)</h3>
+                <section className="mb-8">
+          <h3 className="text-lg font-semibold">Door Placard (DPL)</h3>
+          <p className="mb-3 text-sm text-muted-foreground">
+            Print-on-demand — no stock tracked, notes only
+          </p>
           {dplEntry && <CardDplNotes variant={dplEntry} onSave={onSaveDpl} />}
         </section>
       </TabsContent>
