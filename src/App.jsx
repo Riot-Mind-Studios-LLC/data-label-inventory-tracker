@@ -11,6 +11,7 @@ import {
   mergeSavedData,
 } from "./lib/storage"
 import ModelView from "./components/ModelView"
+import Dashboard from "./components/Dashboard"
 
 function App() {
   const [labelData, setLabelData] = useState([])
@@ -43,7 +44,6 @@ function App() {
           : entry
       )
 
-      // Persist every SKU's current data to localStorage, keyed by SKU.
       const toSave = {}
       next.forEach((entry) => {
         toSave[entry.sku] = {
@@ -57,6 +57,18 @@ function App() {
       return next
     })
   }
+
+  function handleSaveThreshold(newThreshold) {
+    const next = { ...settings, lowStockThreshold: newThreshold }
+    setSettings(next)
+    saveSettings(next)
+  }
+
+  function handleJump(modelCode) {
+    setActiveView(modelCode)
+  }
+
+  const dblEntry = labelData.find((entry) => entry.sku === "AL-DBL")
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -77,7 +89,16 @@ function App() {
         </Tabs>
 
         <div className="mt-6">
-          {activeView === "dashboard" && <p>Dashboard view goes here</p>}
+          {activeView === "dashboard" && (
+            <Dashboard
+              labelData={labelData}
+              settings={settings}
+              onSaveThreshold={handleSaveThreshold}
+              onJump={handleJump}
+              onSaveLabel={handleSaveLabel}
+              dblEntry={dblEntry}
+            />
+          )}
           {MODELS.map(
             (model) =>
               activeView === model.code && (
