@@ -1,11 +1,13 @@
 import { useMemo } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import ListLabelSection from "./ListLabelSection"
+import ListBundleSection from "./ListBundleSection"
+import { calculateDplNeeded } from "@/lib/dplDemand"
 
 const PRODUCT_ORDER = ["BJB", "CJB", "PCM", "DBL"]
+const BUNDLE_NUMBERS = [1, 2, 3]
 
 export default function ModelView({ model, labelData, onSaveLabel }) {
-  // Filter + group this model's variants by product, in a fixed display order.
   const groupedByProduct = useMemo(() => {
     const groups = {}
     for (const product of PRODUCT_ORDER) {
@@ -16,6 +18,9 @@ export default function ModelView({ model, labelData, onSaveLabel }) {
     }
     return groups
   }, [labelData, model.code])
+
+  // Recalculated fresh every render - depends on live label quantities.
+  const dplNeeded = calculateDplNeeded(model)
 
   return (
     <Tabs defaultValue="labels">
@@ -36,7 +41,19 @@ export default function ModelView({ model, labelData, onSaveLabel }) {
       </TabsContent>
 
       <TabsContent value="bundles" className="mt-6">
-        <p>Bundles view goes here</p>
+        <section className="mb-8 rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground">DPL needed</p>
+          <p className="text-2xl font-bold">{dplNeeded}</p>
+        </section>
+
+        {BUNDLE_NUMBERS.map((bundleNumber) => (
+          <ListBundleSection
+            key={bundleNumber}
+            model={model}
+            bundleNumber={bundleNumber}
+            labelData={labelData}
+          />
+        ))}
       </TabsContent>
     </Tabs>
   )
