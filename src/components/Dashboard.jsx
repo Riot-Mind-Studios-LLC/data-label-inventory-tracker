@@ -1,8 +1,9 @@
-import CardThresholdSetting from "./CardThresholdSetting"
-import ListLowStockAlerts from "./ListLowStockAlerts"
-import TableBundleSummary from "./TableBundleSummary"
-import CardLabelVariant from "./CardLabelVariant"
-import { MODELS } from "@/lib/models"
+import CardDataManagement from "./CardDataManagement";
+import CardThresholdSetting from "./CardThresholdSetting";
+import ListLowStockAlerts from "./ListLowStockAlerts";
+import TableBundleSummary from "./TableBundleSummary";
+import CardLabelVariant from "./CardLabelVariant";
+import { MODELS } from "@/lib/models";
 
 export default function Dashboard({
   labelData,
@@ -11,6 +12,7 @@ export default function Dashboard({
   onJump,
   onSaveLabel,
   dblEntry,
+  dplData
 }) {
   return (
     <div>
@@ -29,15 +31,27 @@ export default function Dashboard({
 
       <section className="mb-8">
         <h3 className="mb-3 text-lg font-semibold">Drive Belt (DBL)</h3>
-        {dblEntry && <CardLabelVariant variant={dblEntry} onSave={onSaveLabel} threshold={settings.lowStockThreshold} />}
+        {dblEntry && (
+          <CardLabelVariant
+            variant={dblEntry}
+            onSave={onSaveLabel}
+            threshold={settings.lowStockThreshold}
+          />
+        )}
+      </section>
+
+      <section className="mb-8">
+        <CardDataManagement labelData={labelData} dplData={dplData} />
       </section>
 
       <section>
-        <h3 className="mb-3 text-lg font-semibold">Bundle Availability Summary</h3>
+        <h3 className="mb-3 text-lg font-semibold">
+          Bundle Availability Summary
+        </h3>
         {MODELS.map((model) => (
           <TableBundleSummary key={model.code} model={model} />
         ))}
       </section>
     </div>
-  )
+  );
 }

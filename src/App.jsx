@@ -149,6 +149,7 @@ function App() {
               onJump={handleJump}
               onSaveLabel={handleSaveLabel}
               dblEntry={dblEntry}
+              dplData={dplData}
             />
           )}
           {!isLoading &&
