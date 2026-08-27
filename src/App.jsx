@@ -10,6 +10,7 @@ import {
   saveSettings,
   mergeSavedData,
 } from "./lib/storage"
+import ModelView from "./components/ModelView"
 
 function App() {
   const [labelData, setLabelData] = useState([])
@@ -31,6 +32,31 @@ function App() {
 
     setSettings(loadSettings())
   }, [])
+
+  function handleSaveLabel(sku, updates) {
+    const timestamp = new Date().toISOString()
+
+    setLabelData((prev) => {
+      const next = prev.map((entry) =>
+        entry.sku === sku
+          ? { ...entry, ...updates, lastUpdated: timestamp }
+          : entry
+      )
+
+      // Persist every SKU's current data to localStorage, keyed by SKU.
+      const toSave = {}
+      next.forEach((entry) => {
+        toSave[entry.sku] = {
+          quantity: entry.quantity,
+          notes: entry.notes,
+          lastUpdated: entry.lastUpdated,
+        }
+      })
+      saveData(toSave)
+
+      return next
+    })
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -55,7 +81,12 @@ function App() {
           {MODELS.map(
             (model) =>
               activeView === model.code && (
-                <p key={model.code}>{model.name} view goes here</p>
+                <ModelView
+                  key={model.code}
+                  model={model}
+                  labelData={labelData}
+                  onSaveLabel={handleSaveLabel}
+                />
               )
           )}
         </div>
