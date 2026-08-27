@@ -1,26 +1,33 @@
-import { useMemo } from "react"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import ListLabelSection from "./ListLabelSection"
-import ListBundleSection from "./ListBundleSection"
-import { calculateDplNeeded } from "@/lib/dplDemand"
+import { useMemo } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import ListLabelSection from "./ListLabelSection";
+import ListBundleSection from "./ListBundleSection";
+import CardDplNotes from "./CardDplNotes";
+import { calculateDplNeeded } from "@/lib/dplDemand";
 
-const PRODUCT_ORDER = ["BJB", "CJB", "PCM", "DBL"]
-const BUNDLE_NUMBERS = [1, 2, 3]
+const PRODUCT_ORDER = ["BJB", "CJB", "PCM", "DBL"];
+const BUNDLE_NUMBERS = [1, 2, 3];
 
-export default function ModelView({ model, labelData, onSaveLabel }) {
+export default function ModelView({
+  model,
+  labelData,
+  dplData,
+  onSaveLabel,
+  onSaveDpl,
+}) {
   const groupedByProduct = useMemo(() => {
-    const groups = {}
+    const groups = {};
     for (const product of PRODUCT_ORDER) {
       groups[product] = labelData.filter((entry) => {
-        if (product === "DBL") return entry.product === "DBL"
-        return entry.model === model.code && entry.product === product
-      })
+        if (product === "DBL") return entry.product === "DBL";
+        return entry.model === model.code && entry.product === product;
+      });
     }
-    return groups
-  }, [labelData, model.code])
+    return groups;
+  }, [labelData, model.code]);
 
-  // Recalculated fresh every render - depends on live label quantities.
-  const dplNeeded = calculateDplNeeded(model)
+  const dplEntry = dplData.find((entry) => entry.model === model.code);
+  const dplNeeded = calculateDplNeeded(model);
 
   return (
     <Tabs defaultValue="labels">
@@ -38,6 +45,11 @@ export default function ModelView({ model, labelData, onSaveLabel }) {
             onSave={onSaveLabel}
           />
         ))}
+
+        <section className="mb-8">
+          <h3 className="mb-3 text-lg font-semibold">Door Placard (DPL)</h3>
+          {dplEntry && <CardDplNotes variant={dplEntry} onSave={onSaveDpl} />}
+        </section>
       </TabsContent>
 
       <TabsContent value="bundles" className="mt-6">
@@ -56,5 +68,5 @@ export default function ModelView({ model, labelData, onSaveLabel }) {
         ))}
       </TabsContent>
     </Tabs>
-  )
+  );
 }
